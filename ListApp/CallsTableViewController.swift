@@ -9,11 +9,31 @@
 import UIKit
 
 class CallsTableViewController: UITableViewController {
-    var calls = [Contact]()
-
+ 
+    var sections = [String]()
+    var date_call = ""
+    var time_call = ""
+   
+    struct Objects {
+        var timeCall: String
+        var dateCall: String
+        var callObject : Contact
+    }
+    
+    struct dataObjects {
+        var dataSection: String
+        var dataObjects: [Objects]
+    }
+    
+    var callArray = [Objects]()
+    var subCallArray = [Objects]()
+    var callDataArray = [dataObjects]()
+    
+    
+   
     override func viewDidLoad() {
         super.viewDidLoad()
-
+       
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
 
@@ -30,32 +50,73 @@ class CallsTableViewController: UITableViewController {
 
     override func numberOfSections(in tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
-        return 1
+      
+        return callDataArray.count
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return calls.count
+        
+        return callDataArray[section].dataObjects.count
     }
 
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "callCell", for: indexPath) as! CallViewCell
         
-        cell.setCall(calls[indexPath.row])
-
+   
+        cell.setCall(callDataArray[indexPath.section].dataObjects[indexPath.row].callObject,
+                     c_time: callDataArray[indexPath.section].dataObjects[indexPath.row].timeCall,
+                     c_date: callDataArray[indexPath.section].dataObjects[indexPath.row].dateCall)
+       
         return cell
     }
     
     func addCalls(_ call: Contact) {
         
-            calls.append(call)
-            tableView.reloadData()
-    }
+        let date = Date()
+        let dateFormatter = DateFormatter()
+   
+        dateFormatter.dateFormat = "hh:mm"
+        time_call = dateFormatter.string(from: date as Date)
+        
+        dateFormatter.dateFormat = "dd-MMM-yyyy"
+        date_call = dateFormatter.string(from: date as Date)
+        
+        callArray.append(Objects(timeCall: time_call, dateCall: date_call, callObject: call))
+ 
+// sections by time
+         if !sections.contains(time_call){
+           sections.append(time_call)
+         }
+        
+// sections by date
+//        if !sections.contains(date_call){
+//            sections.append(date_call)
+//        }
     
+        
+
+       callDataArray.removeAll()
+        for sections in sections {
+            
+            for callArray in callArray {
+              if sections == callArray.timeCall {   // sections by time
+//            if sections == callArray.dateCall {   // sections by date
+                    subCallArray.append(callArray)
+                }
+            }
+            callDataArray.append(dataObjects(dataSection: sections, dataObjects:subCallArray))
+            subCallArray.removeAll()
+        }
+        
+        tableView.reloadData()
+    }
+   
      override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-         return "Recent Calls"
+        return callDataArray[section].dataSection
      }
+ 
 
     /*
     // Override to support conditional editing of the table view.

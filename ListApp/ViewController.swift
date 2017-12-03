@@ -28,11 +28,39 @@ class ViewController: UIViewController {
 
     @IBAction func add(_ sender: UIButton) {
         contactName = nameField.text
-        contactPhone = phoneField.text
+        contactPhone = phoneField.text        
+        
         let contactsTableController = navigationController?.viewControllers.first as? ContactsTableViewController
-    
-        contactsTableController?.contacts.append(Contact(name: contactName!, phone: contactPhone!))
+        
+        
+        if contactName != "" && contactPhone != "" {
+            if !(contactsTableController?.name.contains(contactName!))!{
+            
+            contactsTableController?.contacts.append(Contact(name: contactName!, phone: contactPhone!))
+            contactsTableController?.sort_contacts()
+            
+            } else {
+                
+                let alert = UIAlertController(title: nil, message:"This name is already exist", preferredStyle: .alert)
+                let alertActionAdd = UIAlertAction(title: "Rename", style: .default){ (alerAction) in self.nameField.becomeFirstResponder()
+                    
+                }
+                let alertActionCancel = UIAlertAction(title: "Cancel", style: .cancel) {(alerAction) in
+                     self.navigationController?.popViewController(animated: true)
+                }
+                
+                alert.addAction(alertActionAdd)
+                alert.addAction(alertActionCancel)
+                self.present(alert, animated: true, completion: nil)
+                
+                }
+            
+            
+            
+        }
+        
         contactsTableController?.tableView.reloadData()
         navigationController?.popViewController(animated: true)
+        
     }
 }
