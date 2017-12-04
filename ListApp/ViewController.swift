@@ -32,6 +32,8 @@ class ViewController: UIViewController {
         
         let contactsTableController = navigationController?.viewControllers.first as? ContactsTableViewController
         
+        if (!nameField.isFocused) {nameField.becomeFirstResponder()}
+//        nameField.becomeFirstResponder()
         
         if contactName != "" && contactPhone != "" {
             if !(contactsTableController?.name.contains(contactName!))!{
@@ -54,8 +56,6 @@ class ViewController: UIViewController {
                 self.present(alert, animated: true, completion: nil)
                 
                 }
-            
-            
             
         }
         

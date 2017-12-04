@@ -84,17 +84,27 @@ class CallsTableViewController: UITableViewController {
         date_call = dateFormatter.string(from: date as Date)
         
         callArray.append(Objects(timeCall: time_call, dateCall: date_call, callObject: call))
+        callArray.reverse()
+        
  
 // sections by time
+       
+        
          if !sections.contains(time_call){
-           sections.append(time_call)
+             sections.reverse()
+             sections.append(time_call)
+             sections.reverse()
          }
+       
         
 // sections by date
 //        if !sections.contains(date_call){
+//            sections.reverse()
 //            sections.append(date_call)
+//            sections.reverse()
 //        }
-    
+        
+        
         
 
        callDataArray.removeAll()
