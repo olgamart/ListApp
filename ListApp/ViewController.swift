@@ -18,6 +18,7 @@ class ViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        nameField.becomeFirstResponder()
         // Do any additional setup after loading the view, typically from a nib.
     }
 
@@ -32,8 +33,6 @@ class ViewController: UIViewController {
         
         let contactsTableController = navigationController?.viewControllers.first as? ContactsTableViewController
         
-        if (!nameField.isFocused) {nameField.becomeFirstResponder()}
-//        nameField.becomeFirstResponder()
         
         if contactName != "" && contactPhone != "" {
             if !(contactsTableController?.name.contains(contactName!))!{
