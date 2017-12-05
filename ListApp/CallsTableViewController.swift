@@ -87,22 +87,20 @@ class CallsTableViewController: UITableViewController {
         callArray.reverse()
         
  
-// sections by time
-       
-        
-         if !sections.contains(time_call){
-             sections.reverse()
-             sections.append(time_call)
+// sections by time 
+         if !sections.contains(time_call + " " + date_call){
+             sections.append(time_call + " " + date_call)
+             sections.sort()
              sections.reverse()
          }
        
         
 // sections by date
 //        if !sections.contains(date_call){
-//            sections.reverse()
-//            sections.append(date_call)
-//            sections.reverse()
-//        }
+//           sections.append(date_call)
+//           sections.sort()
+//           sections.reverse()
+//       }
         
         
         
@@ -111,8 +109,8 @@ class CallsTableViewController: UITableViewController {
         for sections in sections {
             
             for callArray in callArray {
-              if sections == callArray.timeCall {   // sections by time
-//            if sections == callArray.dateCall {   // sections by date
+              if sections == callArray.timeCall + " " + callArray.dateCall{   // sections by time
+ //           if sections == callArray.dateCall {   // sections by date
                     subCallArray.append(callArray)
                 }
             }

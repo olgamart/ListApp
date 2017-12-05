@@ -23,6 +23,7 @@ class ContactsTableViewController: UITableViewController {
     var sections = [String]()
     var subsection = [Contact]()
     var name = [String]()
+    var date_array = [String]() // save data
   
     struct Objects {
         var sectionName : String
@@ -33,8 +34,34 @@ class ContactsTableViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        sort_contacts()
+        
+        let fileURL = self.dataFileURL()
+        if (FileManager.default.fileExists(atPath: fileURL.path!)) {
+            if let array = NSArray(contentsOf: fileURL as URL) as? [String] {
+                for i in 0..<array.count {
+                    date_array[i] = array[i]
+                }
+            }
+            let app = UIApplication.shared
+            NotificationCenter.default.addObserver(self, selector:
+            #selector(self.applicationWillResignActive(notification:)),
+            name: Notification.Name.UIApplicationWillResignActive, object: app)
+        }
+       
 
+        if  !date_array.isEmpty {
+            contacts.removeAll()
+            for i in 0...date_array.count / 2 {
+                contacts[i].name = date_array[i]
+            }
+            
+            for i in date_array.count / 2...date_array.count {
+                contacts[i].phone = date_array[i]
+            }
+        }
+ 
+ 
+        sort_contacts()
         
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
@@ -174,8 +201,31 @@ class ContactsTableViewController: UITableViewController {
             subsection.removeAll()
         }
     }
+
+    @objc func applicationWillResignActive(notification:NSNotification) {
+        
+        let fileURL = self.dataFileURL()
+        
+        for contacts in contacts {
+            date_array.append(contacts.name)
+        }
+        for contacts in contacts {
+            date_array.append(contacts.phone)
+        }
+    
+        let array = (self.date_array as NSArray).value(forKey: "text") as! NSArray       
+        array.write(to: fileURL as URL, atomically: true)
+    }
     
     
+    func dataFileURL() -> NSURL {
+        let urls = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
+        var url:NSURL?
+        url = urls.first!.appendingPathComponent("data.plist") as NSURL
+        return url!
+    }
+ 
+ 
     /*
     // MARK: - Navigation
 
