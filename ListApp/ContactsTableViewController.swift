@@ -24,6 +24,7 @@ class ContactsTableViewController: UITableViewController {
     var subsection = [Contact]()
     var name = [String]()
     var date_array = [String]() // save data
+    
   
     struct Objects {
         var sectionName : String
@@ -38,29 +39,29 @@ class ContactsTableViewController: UITableViewController {
         let fileURL = self.dataFileURL()
         if (FileManager.default.fileExists(atPath: fileURL.path!)) {
             if let array = NSArray(contentsOf: fileURL as URL) as? [String] {
+                date_array.removeAll()
                 for i in 0..<array.count {
-                    date_array[i] = array[i]
+                    date_array.append(array[i])
                 }
             }
+        }
             let app = UIApplication.shared
             NotificationCenter.default.addObserver(self, selector:
             #selector(self.applicationWillResignActive(notification:)),
             name: Notification.Name.UIApplicationWillResignActive, object: app)
-        }
+        
        
-
+//Read contacts
+ 
         if  !date_array.isEmpty {
             contacts.removeAll()
-            for i in 0...date_array.count / 2 {
-                contacts[i].name = date_array[i]
-            }
-            
-            for i in date_array.count / 2...date_array.count {
-                contacts[i].phone = date_array[i]
+ 
+             for i in stride(from: 0, to: date_array.count - 1, by: 2) {
+                contacts.append(Contact(name: date_array[i], phone: date_array[i + 1]))
             }
         }
  
- 
+  
         sort_contacts()
         
         // Uncomment the following line to preserve selection between presentations
@@ -120,6 +121,18 @@ class ContactsTableViewController: UITableViewController {
             let index_remove = name.index(of: objectArray[indexPath.section].sectionObjects[indexPath.row].name)
             contacts.remove(at: index_remove!)
             sort_contacts()
+            
+// write file
+            let fileURL = self.dataFileURL()
+            date_array.removeAll()
+            for contacts in contacts {
+                date_array.append(contacts.name)
+                date_array.append(contacts.phone)
+            }
+            let array = self.date_array as NSArray
+            array.write(to: fileURL as URL, atomically: true)
+// end write file
+            
             tableView.deleteRows(at: [indexPath], with: .fade)
         } else if editingStyle == .insert {
             // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
@@ -204,24 +217,14 @@ class ContactsTableViewController: UITableViewController {
 
     @objc func applicationWillResignActive(notification:NSNotification) {
         
-        let fileURL = self.dataFileURL()
-        
-        for contacts in contacts {
-            date_array.append(contacts.name)
-        }
-        for contacts in contacts {
-            date_array.append(contacts.phone)
-        }
-    
-        let array = (self.date_array as NSArray).value(forKey: "text") as! NSArray       
-        array.write(to: fileURL as URL, atomically: true)
+ 
     }
     
     
     func dataFileURL() -> NSURL {
         let urls = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
         var url:NSURL?
-        url = urls.first!.appendingPathComponent("data.plist") as NSURL
+        url = urls.first!.appendingPathComponent("data.txt") as NSURL
         return url!
     }
  

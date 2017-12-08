@@ -38,11 +38,28 @@ class ViewController: UIViewController {
         let contactsTableController = navigationController?.viewControllers.first as? ContactsTableViewController
         
         
+        
         if contactName != "" && contactPhone != "" {
             if !(contactsTableController?.name.contains(contactName!))!{
             
             contactsTableController?.contacts.append(Contact(name: contactName!, phone: contactPhone!))
             contactsTableController?.sort_contacts()
+                
+// write file
+                let fileURL = contactsTableController?.dataFileURL()
+                let contacts = contactsTableController?.contacts
+                var date_array = [String]()
+                for contacts in contacts! {
+                    date_array.append(contacts.name)
+                    date_array.append(contacts.phone)
+                }
+                let array = date_array as NSArray                
+                array.write(to: fileURL! as URL, atomically: true)
+// end write file
+                
+                
+                
+                
             
             } else {
                 

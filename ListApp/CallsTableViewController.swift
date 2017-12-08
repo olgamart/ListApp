@@ -29,10 +29,40 @@ class CallsTableViewController: UITableViewController {
     var subCallArray = [Objects]()
     var callDataArray = [dataObjects]()
     
+    var date_array = [String]() // save data
+    
     
    
     override func viewDidLoad() {
         super.viewDidLoad()
+   
+        let fileURL = self.dataFileURL()
+        if (FileManager.default.fileExists(atPath: fileURL.path!)) {
+            if let array = NSArray(contentsOf: fileURL as URL) as? [String] {
+                date_array.removeAll()
+                for i in 0..<array.count {
+                    date_array.append(array[i])
+                }
+            }
+        }
+        let app = UIApplication.shared
+        NotificationCenter.default.addObserver(self, selector:
+            #selector(self.applicationWillResignActive(notification:)),
+            name: Notification.Name.UIApplicationWillResignActive, object: app)
+        
+//Read calls
+        
+        if  !date_array.isEmpty {
+            callArray.removeAll()
+           
+            for i in stride(from: 0, to: date_array.count - 3, by: 4) {
+                callArray.append(Objects(timeCall: date_array[i], dateCall: date_array[i + 1], callObject: (Contact(name: date_array[i + 2], phone: date_array[i + 3]))))
+            }
+            
+       }
+        
+       calls_sorted()
+        print(callDataArray)
        
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
@@ -86,37 +116,21 @@ class CallsTableViewController: UITableViewController {
         callArray.append(Objects(timeCall: time_call, dateCall: date_call, callObject: call))
         callArray.reverse()
         
- 
-// sections by time 
-         if !sections.contains(time_call + " " + date_call){
-             sections.append(time_call + " " + date_call)
-             sections.sort()
-             sections.reverse()
-         }
-       
-        
-// sections by date
-//        if !sections.contains(date_call){
-//           sections.append(date_call)
-//           sections.sort()
-//           sections.reverse()
-//       }
-        
-        
-        
-
-       callDataArray.removeAll()
-        for sections in sections {
-            
-            for callArray in callArray {
-              if sections == callArray.timeCall + " " + callArray.dateCall{   // sections by time
- //           if sections == callArray.dateCall {   // sections by date
-                    subCallArray.append(callArray)
-                }
-            }
-            callDataArray.append(dataObjects(dataSection: sections, dataObjects:subCallArray))
-            subCallArray.removeAll()
+// write file
+        let fileURL = self.dataFileURL()
+        date_array.removeAll()
+        for callArray in callArray {
+            date_array.append(callArray.timeCall)
+            date_array.append(callArray.dateCall)
+            date_array.append(callArray.callObject.name)
+            date_array.append(callArray.callObject.phone)
         }
+        
+        let array = self.date_array as NSArray
+        array.write(to: fileURL as URL, atomically: true)
+// end write file
+        
+        calls_sorted()
         
         tableView.reloadData()
     }
@@ -124,7 +138,53 @@ class CallsTableViewController: UITableViewController {
      override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         return callDataArray[section].dataSection
      }
+    
+    func calls_sorted() {
+        // sections by time
+        for callArray in callArray {
+            if !sections.contains(callArray.timeCall + " " + callArray.dateCall ){
+                sections.append(callArray.timeCall + " " + callArray.dateCall)
+                sections.sort()
+                sections.reverse()
+            }
+        }
+        
+    // sections by date
+    //        if !sections.contains(callArray.dateCall){
+    //           sections.append(callArray.dateCall)
+    //           sections.sort()
+    //           sections.reverse()
+    //       }
+        
+        
+        
+        
+        callDataArray.removeAll()
+        for sections in sections {
+            
+            for callArray in callArray {
+                if sections == callArray.timeCall + " " + callArray.dateCall{   // sections by time
+                    //           if sections == callArray.dateCall {   // sections by date
+                    subCallArray.append(callArray)
+                }
+            }
+            callDataArray.append(dataObjects(dataSection: sections, dataObjects:subCallArray))
+            subCallArray.removeAll()
+        }
+        
+    }
+    
+    @objc func applicationWillResignActive(notification:NSNotification) {
+        
+    }
  
+    
+    func dataFileURL() -> NSURL {
+        let urls = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
+        var url:NSURL?
+        url = urls.first!.appendingPathComponent("calls.txt") as NSURL
+        return url!
+    }
 
     /*
     // Override to support conditional editing of the table view.
