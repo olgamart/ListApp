@@ -61,9 +61,8 @@ class CallsTableViewController: UITableViewController {
             
        }
         
-       calls_sorted()
-        print(callDataArray)
-       
+       calls_sort()
+              
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
 
@@ -130,7 +129,7 @@ class CallsTableViewController: UITableViewController {
         array.write(to: fileURL as URL, atomically: true)
 // end write file
         
-        calls_sorted()
+        calls_sort()
         
         tableView.reloadData()
     }
@@ -139,7 +138,7 @@ class CallsTableViewController: UITableViewController {
         return callDataArray[section].dataSection
      }
     
-    func calls_sorted() {
+    func calls_sort() {
         // sections by time
         for callArray in callArray {
             if !sections.contains(callArray.timeCall + " " + callArray.dateCall ){

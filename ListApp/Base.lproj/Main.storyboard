@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="lwV-mI-M2p">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="lwV-mI-M2p">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13527"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
         <capability name="Navigation items with more than one left or right bar item" minToolsVersion="7.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -228,7 +228,6 @@
                                         <constraint firstItem="NWc-yn-vYL" firstAttribute="leading" secondItem="CCF-Vu-rI2" secondAttribute="leading" constant="16" id="dpM-ym-IaF"/>
                                         <constraint firstAttribute="trailing" secondItem="VcK-b4-zaA" secondAttribute="trailing" constant="16" id="hc0-J9-ngn"/>
                                         <constraint firstItem="kVf-ae-kwk" firstAttribute="leading" secondItem="CCF-Vu-rI2" secondAttribute="leading" constant="70" id="kcJ-DA-AQr"/>
-                                        <constraint firstItem="VcK-b4-zaA" firstAttribute="top" secondItem="04g-Er-qur" secondAttribute="bottom" constant="3" id="usr-A7-Ejx"/>
                                         <constraint firstItem="c3L-Kw-ck5" firstAttribute="top" secondItem="CCF-Vu-rI2" secondAttribute="top" constant="3" id="x3i-s8-u8c"/>
                                         <constraint firstItem="NWc-yn-vYL" firstAttribute="top" secondItem="CCF-Vu-rI2" secondAttribute="top" constant="5" id="yQm-S6-BXE"/>
                                     </constraints>

@@ -59,7 +59,7 @@ class ContactsTableViewController: UITableViewController {
              for i in stride(from: 0, to: date_array.count - 1, by: 2) {
                 contacts.append(Contact(name: date_array[i], phone: date_array[i + 1]))
             }
-        }
+       }
  
   
         sort_contacts()
